@@ -568,7 +568,7 @@ with tab3:
         _, _X2 = simulate(params, DEFAULT_SCENARIOS[sname], with_shock=False,
                           beta_shock=0, noise=noise_lvl, T_end=T_end)
         pb_s = _X2[:, STATE_INDEX["P"]]
-        rl   = float(np.trapz(pb_s - np.clip(pp_s, 0, pb_s), tt))
+        rl   = float(NUMPY_TRAPEZOID(pb_s - np.clip(pp_s, 0, pb_s), tt))
         rows.append({
             "Scenario": sname,
             "Severity": DEFAULT_SCENARIOS[sname]["severity"],
