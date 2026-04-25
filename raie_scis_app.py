@@ -9,6 +9,9 @@ import streamlit as st
 import pandas as pd
 from io import BytesIO
 
+# NumPy 2.x may not expose np.trapz in some builds.
+NUMPY_TRAPEZOID = getattr(np, "trapezoid", None) or getattr(np, "trapz")
+
 # ─────────────────────────────────────────────
 # PAGE CONFIG
 # ─────────────────────────────────────────────
@@ -387,7 +390,7 @@ col1, col2, col3, col4, col5 = st.columns(5)
 P_min     = P.min()
 t_min     = t_sim[P.argmin()]
 recovery  = P[-1]
-resilience_loss = float(np.trapz(P_base - np.clip(P, 0, P_base), t_sim))
+resilience_loss = float(NUMPY_TRAPEZOID(P_base - np.clip(P, 0, P_base), t_sim))
 col1.metric("P_min (trough)",   f"{P_min:.3f}", f"at day {t_min:.0f}")
 col2.metric("P_final",          f"{recovery:.3f}", f"Δ {recovery - P_min:.3f} recovery")
 col3.metric("Viability V̄",     f"{Vb[-1]:.3f}")
